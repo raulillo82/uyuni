@@ -11,8 +11,8 @@
 @scope_cobbler
 Feature: Be able to manage KVM virtual machines via the GUI
 
-  Scenario: Log in as admin user
-    Given I am authorized for the "Admin" section
+  Scenario: Log in as org admin user
+    Given I am authorized
 
   Scenario: Show the KVM host system overview
     Given I am on the Systems overview page of this "kvm_server"

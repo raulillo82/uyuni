@@ -409,6 +409,7 @@ Style/GlobalVars:
     - 'features/support/env.rb'
     - 'features/support/twopence_init.rb'
     - 'features/support/xmlrpc_client.rb'
+    - 'features/support/api_test.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.

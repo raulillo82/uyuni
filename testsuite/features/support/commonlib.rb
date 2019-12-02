@@ -6,11 +6,6 @@ require 'yaml'
 require 'nokogiri'
 require 'timeout'
 
-# return current URL
-def current_url
-  driver.current_url
-end
-
 # generate temporary file on the controller
 def generate_temp_file(name, content)
   Tempfile.open(name) do |file|
@@ -237,7 +232,9 @@ def escape_regex(text)
 end
 
 def get_system_id(node)
-  $api_test.system.search_by_name(node.full_hostname).first['id']
+  result = $api_test.system.search_by_name(node.full_hostname)
+  raise "The system #{node.full_hostname} is not registered in the server" if result.nil?
+  result.first['id']
 end
 
 def check_shutdown(host, time_out)
@@ -317,3 +314,30 @@ def get_gpg_keys(node, target = $server)
   gpg_keys.lines.map(&:strip)
 end
 # rubocop:enable Metrics/AbcSize
+
+# Retrieve the value defined in a feature scope context
+def get_context(feature_scope, key)
+  return unless $context.key?(feature_scope)
+
+  $context[feature_scope][key]
+end
+
+# Define or replace a key-value in a feature scope context
+def add_context(feature_scope, key, value)
+  $context[feature_scope] = {} unless $context.key?(feature_scope)
+  $context[feature_scope].merge!({ key => value })
+end
+
+# Mutex for processes accessing the API of the server via admin user
+def api_lock?
+  File.open('server_api_call.lock', File::CREAT) do |file|
+    return !file.flock(File::LOCK_EX)
+  end
+end
+
+# Unlock the Mutex for processes accessing the API of the server via admin user
+def api_unlock
+  File.open('server_api_call.lock') do |file|
+    file.flock(File::LOCK_UN)
+  end
+end

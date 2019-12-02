@@ -24,7 +24,7 @@ Feature: OpenSCAP audit of Red Hat-like Salt minion
     Then I should see a "Confirm Software Channel Change" text
     When I click on "Confirm"
     Then I should see a "Changing the channels has been scheduled." text
-    And I wait until event "Subscribe channels scheduled by admin" is completed
+    And I wait until event "Subscribe channels scheduled" is completed
     When I enable repository "Rocky-BaseOS" on this "rhlike_minion"
     And I enable the repositories "tools_update_repo tools_pool_repo" on this "rhlike_minion"
     And I refresh the metadata for "rhlike_minion"
@@ -101,4 +101,4 @@ Feature: OpenSCAP audit of Red Hat-like Salt minion
     Then I should see a "Confirm Software Channel Change" text
     When I click on "Confirm"
     Then I should see a "Changing the channels has been scheduled." text
-    And I wait until event "Subscribe channels scheduled by admin" is completed
+    And I wait until event "Subscribe channels scheduled" is completed

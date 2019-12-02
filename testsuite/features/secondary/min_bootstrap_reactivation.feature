@@ -8,8 +8,8 @@ Feature: Bootstrapping with reactivation key
   As an authorized user
   I want to avoid re-registration with invalid input parameters
 
-  Scenario: Log in as admin user
-    Given I am authorized for the "Admin" section
+  Scenario: Log in as org admin user
+    Given I am authorized
 
   Scenario: Generate a re-activation key
     Given I am on the Systems overview page of this "sle_minion"
@@ -61,7 +61,7 @@ Feature: Bootstrapping with reactivation key
     When I follow "Events" in the content area
     And I follow "History" in the content area
     And I wait until I see "Server reactivated as Salt minion" text, refreshing the page
-    And I wait until event "Apply states [certs, channels, packages, services.salt-minion] scheduled by admin" is completed
+    And I wait until event "Apply states [certs, channels, packages, services.salt-minion] scheduled" is completed
 
   Scenario: Cleanup: delete SLES minion after reactivation tests
     Given I am on the Systems overview page of this "sle_minion"
@@ -84,3 +84,20 @@ Feature: Bootstrapping with reactivation key
     And I wait until I see "Successfully bootstrapped host!" text
     And I follow the left menu "Systems > System List > All"
     And I wait until I see the name of "sle_minion", refreshing the page
+
+  Scenario: Cleanup: subscribe again to base channel after reactivation tests
+    Given I am on the Systems overview page of this "sle_minion"
+    When I follow "Software" in the content area
+    And I follow "Software Channels" in the content area
+    And I wait until I do not see "Loading..." text
+    And I wait until I see "SUSE Channels" text, refreshing the page
+    And I check radio button "SLE-Product-SLES15-SP4-Pool for x86_64"
+    And I wait until I do not see "Loading..." text
+    And I include the recommended child channels
+    And I check "SLE-Module-DevTools15-SP4-Pool for x86_64"
+    And I check "Fake-RPM-SLES-Channel"
+    And I click on "Next"
+    Then I should see a "Confirm Software Channel Change" text
+    When I click on "Confirm"
+    Then I should see a "Changing the channels has been scheduled." text
+    When I wait until event "Subscribe channels scheduled" is completed

@@ -4,8 +4,8 @@
 @scope_visualization
 Feature: Test the notification/notification-messages feature
 
-  Scenario: Log in as admin user
-    Given I am authorized for the "Admin" section
+  Scenario: Log in as org admin user
+    Given I am authorized
 
   Scenario: Check the unread notification counter is correct
     When I follow the left menu "Home > Notification Messages"

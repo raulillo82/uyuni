@@ -758,7 +758,7 @@ When(/^I remember when I scheduled an action$/) do
 end
 
 Then(/^I should see "([^"]*)" at least (\d+) minutes after I scheduled an action$/) do |text, minutes|
-  # TODO is there a better way then page.all ?
+  # TODO is there a better way than page.all ?
   elements = all('div', text: text)
   raise "Text #{text} not found in the page" if elements.nil?
   match = elements[0].text.match(/#{text}\s*(\d+\/\d+\/\d+ \d+:\d+:\d+ (AM|PM)+ [^\s]+)/)

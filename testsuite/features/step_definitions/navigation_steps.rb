@@ -372,6 +372,8 @@ end
 
 Given(/^I am not authorized$/) do
   begin
+    xpath_logout = "//a[@href='/rhn/Logout.do']"
+    find(:xpath, xpath_logout).click if has_xpath?(xpath_logout)
     page.reset!
   rescue NoMethodError
     log 'The browser session could not be cleaned.'
@@ -397,6 +399,8 @@ Given(/^I am authorized for the "([^"]*)" section$/) do |section|
     step %(I am authorized as "admin" with password "admin")
   when 'Images'
     step %(I am authorized as "kiwikiwi" with password "kiwikiwi")
+  when 'Docker'
+    step %(I am authorized as "docker" with password "docker")
   else
     log "Section #{section} not supported"
   end
@@ -526,7 +530,7 @@ Given(/^I am authorized as "([^"]*)" with password "([^"]*)"$/) do |user, passwd
 end
 
 Given(/^I am authorized$/) do
-  step %(I am authorized as "testing" with password "testing")
+  step %(I am authorized as "#{$current_user}" with password "#{$current_password}")
 end
 
 When(/^I sign out$/) do
@@ -538,12 +542,11 @@ Then(/^I should not be authorized$/) do
 end
 
 Then(/^I should be logged in$/) do
-  xpath_query = "//a[@href='/rhn/Logout.do']"
-  raise 'User is not logged in' unless find(:xpath, xpath_query)
+  raise 'User is not logged in' unless has_xpath?("//a[@href='/rhn/Logout.do']")
 end
 
 Then(/^I am logged in$/) do
-  raise 'User is not logged in' unless find(:xpath, "//a[@href='/rhn/Logout.do']").visible?
+  raise 'User is not logged in' unless has_xpath?("//a[@href='/rhn/Logout.do']")
   # text = "You have just created your first #{product} user. To finalize your installation please use the Setup Wizard"
   # Workaround: Ignore the fact that the message is not shown
   # TODO: restore this as soon as the related issue is fixed: https://github.com/SUSE/spacewalk/issues/19369
@@ -1124,7 +1127,7 @@ When(/^I enter "([^"]*)" as the left menu search field$/) do |search_text|
 end
 
 Then(/^I should see left menu empty$/) do
-  raise StandardError, 'The left menu is not empty.' unless page.has_no_xpath?("//*[contains(@class, 'level1')]/*/*[contains(@class, 'nodeLink')]")
+  raise StandardError, 'The left menu is not empty.' unless has_no_xpath?("//*[contains(@class, 'level1')]/*/*[contains(@class, 'nodeLink')]")
 end
 
 Then(/^I should see the text "(.*?)" in the (Operating System|Architecture|Channel Label) field/) do |text, field|
