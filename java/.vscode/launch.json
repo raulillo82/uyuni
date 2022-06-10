@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug Uyuni",
+            "request": "attach",
+            "hostName": "server.tf.local",
+            "port": 8000
+        },
+        {
+            "type": "java",
+            "name": "Debug Taskomatic",
+            "request": "attach",
+            "hostName": "server.tf.local",
+            "port": 8001
+        }
+    ]
+}
+
