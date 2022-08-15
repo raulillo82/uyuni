@@ -512,7 +512,7 @@ public class Config {
                 props.load(new StringReader(configString.replace("\\", "\\\\")));
             }
             catch (IOException e) {
-                logger.error("Could not parse file {}", curr, e);
+                logger.error("Could not parse file {}", curr);
             }
             String ns = makeNamespace(curr);
             logger.debug("Adding namespace: {} for file: {}", ns, curr.getAbsolutePath());
