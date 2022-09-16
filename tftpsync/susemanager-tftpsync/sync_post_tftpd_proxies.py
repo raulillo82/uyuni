@@ -45,9 +45,7 @@ def run(api, args):
     settings = api.settings()
 
     # test if proxies are configured:
-    try:
-        p = settings.proxies
-    except:
+    if not settings.proxies:
         # not configured - so we return
         return 0
 
