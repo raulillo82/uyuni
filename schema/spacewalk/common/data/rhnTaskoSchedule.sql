@@ -181,4 +181,9 @@ VALUES (sequence_nextval('rhn_tasko_schedule_id_seq'), 'update-reporting-hub-def
         (SELECT id FROM rhnTaskoBunch WHERE name='mgr-update-reporting-hub-bunch'),
         current_timestamp, '0 30 1 ? * *');
 
+INSERT INTO rhnTaskoSchedule (id, job_label, bunch_id, active_from, cron_expr)
+VALUES(sequence_nextval('rhn_tasko_schedule_id_seq'), 'image-registry-sync-default',
+       (SELECT id FROM rhnTaskoBunch WHERE name='image-registry-sync-bunch'),
+       current_timestamp, '0 0/10 * * * ?');
+
 commit;
