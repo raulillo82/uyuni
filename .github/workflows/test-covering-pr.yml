@@ -1,0 +1,34 @@
+name: 'Test covering my Pull Request changes'
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  tests-covering-pr:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i ioredis
+      - id: files
+        uses: Ana06/get-changed-files@v2.2.0
+        with:
+          filter: '*.java'
+      - id: tests_covering_pr
+        name: Tests covering PR
+        run: echo "result=$(node .github/scripts/test_covering_pr.js ${{ steps.files.outputs.added_modified }})" >> $GITHUB_OUTPUT
+      - name: Write a comment into the Pull Request
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            **Suggested tests to cover this Pull Request**:
+            ${{ steps.tests_covering_pr.outputs.result }}
