@@ -29,6 +29,9 @@ RUN cp /usr/bin/uyuni-setup-reportdb /usr/bin/uyuni-setup-reportdb.original
 RUN sed -i 's/sysctl kernel.shmmax/#sysctl kernel.shmmax/g' /usr/bin/uyuni-setup-reportdb
 RUN sed -i 's/-a "$PG_SOCKET"//g' /usr/bin/uyuni-setup-reportdb
 
+# Output all logs to stdout to integrate with containers tooling
+RUN sed -i 's/#ForwardToConsole=no/ForwardToConsole=yes/' /etc/systemd/journald.conf
+
 # LABELs
 ARG PRODUCT=Uyuni
 ARG VENDOR="Uyuni project"
